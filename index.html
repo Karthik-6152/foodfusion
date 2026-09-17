@@ -3,137 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FoodFusion - Secure Card Checkout</title>
+  <title>FoodFusion - Secure Checkout</title>
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; }
-    body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .checkout-container { background: #ffffff; max-width: 440px; width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 28px; }
-    .header { text-align: center; margin-bottom: 20px; }
-    .header h2 { font-size: 1.5rem; color: #111; }
-    .header p { color: #666; font-size: 0.9rem; margin-top: 4px; }
-    .badge { background: #e8f5e9; color: #2e7d32; font-size: 0.75rem; font-weight: 600; padding: 5px; border-radius: 4px; text-align: center; margin-bottom: 18px; }
-    .order-box { background: #fafafa; border: 1px solid #eaeaea; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }
-    .order-row { display: flex; justify-content: space-between; font-size: 0.95rem; color: #555; margin-bottom: 6px; }
-    .order-row.total { border-top: 1px dashed #ccc; padding-top: 8px; margin-top: 8px; font-weight: bold; color: #111; font-size: 1.05rem; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
     
-    .field-group { margin-bottom: 14px; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 6px; }
-    .card-field { height: 45px; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
-    .field-row { display: flex; gap: 12px; }
-    .field-row .field-group { flex: 1; }
+    /* Blue Top Header */
+    .top-header { background: #2563eb; color: #fff; text-align: center; padding: 25px 20px; }
+    .top-header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+    .top-header p { font-size: 0.95rem; opacity: 0.9; }
+
+    /* Center Container */
+    .checkout-wrapper { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+    .checkout-card { background: #ffffff; max-width: 480px; width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 32px 28px; }
     
-    .pay-btn { width: 100%; padding: 14px; background: #0070ba; color: #fff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px; }
-    .pay-btn:hover { background: #005ea6; }
-    .pay-btn:disabled { background: #a0cce8; cursor: not-allowed; }
+    .checkout-card h2 { text-align: center; font-size: 1.6rem; color: #0f172a; margin-bottom: 24px; font-weight: 700; }
     
-    .test-credentials { font-size: 0.75rem; color: #666; background: #f0f4f8; padding: 10px; border-radius: 6px; margin-top: 16px; line-height: 1.4; }
+    /* Product Info Section */
+    .item-section { display: flex; gap: 20px; align-items: center; padding-bottom: 24px; border-bottom: 1px solid #e2e8f0; margin-bottom: 24px; }
+    .item-img { width: 100px; height: 100px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
+    .item-details h3 { font-size: 1.2rem; color: #0f172a; margin-bottom: 4px; }
+    .item-details p { font-size: 0.9rem; color: #64748b; margin-bottom: 10px; }
+    .item-price { font-size: 1.4rem; font-weight: 700; color: #2563eb; }
+    
+    .payment-title { font-size: 0.95rem; font-weight: 600; color: #1e293b; margin-bottom: 16px; }
+    #paypal-button-container { width: 100%; min-height: 120px; }
   </style>
 
-  <!-- INSERT YOUR PAYPAL SANDBOX CLIENT ID IN PLACE OF YOUR_SANDBOX_CLIENT_ID -->
+  <!-- REPLACE YOUR CLIENT ID HERE -->
   <script src="https://www.paypal.com/sdk/js?client-id=ARjKcSZxVx94Kl55I-W2ma9xsn33Dxdv432Tv_fMcLuvKfpP5r2xd8FL0plzA14jAtlb0bgVEC74wcVT
-&components=card-fields&currency=USD"></script>
+&currency=USD"></script>
 </head>
 <body>
 
-  <div class="checkout-container">
-    <div class="header">
-      <h2>FoodFusion Payment</h2>
-      <p>Enter Card Details via PayPal Gateway</p>
-    </div>
+  <!-- Top Blue Bar -->
+  <div class="top-header">
+    <h1>FoodFusion</h1>
+    <p>Secure Checkout</p>
+  </div>
 
-    <div class="badge">SANDBOX ENVIRONMENT ACTIVE</div>
+  <!-- Main Card -->
+  <div class="checkout-wrapper">
+    <div class="checkout-card">
+      <h2>Order Summary</h2>
 
-    <div class="order-box">
-      <div class="order-row">
-        <span>Order:</span>
-        <strong>Veg Burger (x1)</strong>
-      </div>
-      <div class="order-row">
-        <span>Delivery:</span>
-        <span style="color: #2e7d32;">FREE</span>
-      </div>
-      <div class="order-row total">
-        <span>Total:</span>
-        <span>$0.75 (₹60.00)</span>
-      </div>
-    </div>
-
-    <!-- Official PayPal Hosted Card Fields Form -->
-    <div id="card-form">
-      <div class="field-group">
-        <label>Card Number</label>
-        <div id="card-number" class="card-field"></div>
-      </div>
-
-      <div class="field-row">
-        <div class="field-group">
-          <label>Expiry Date</label>
-          <div id="card-expiry" class="card-field"></div>
-        </div>
-        <div class="field-group">
-          <label>CVV / CVC</label>
-          <div id="card-cvv" class="card-field"></div>
+      <div class="item-section">
+        <img class="item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" alt="Veg Burger">
+        <div class="item-details">
+          <h3>Veg Burger</h3>
+          <p>FoodFusion Special</p>
+          <div class="item-price">₹60 (~$0.75)</div>
         </div>
       </div>
 
-      <button id="card-field-submit-button" class="pay-btn" type="button">Pay $0.75</button>
-    </div>
+      <div class="payment-title">Choose Payment Method</div>
 
-    <div class="test-credentials">
-      <strong>Sandbox Test Card:</strong><br>
-      Number: <code>4111 1111 1111 1111</code><br>
-      Expiry: Any future date (e.g. <code>12/28</code>) | CVV: <code>123</code>
+      <!-- PayPal and Debit/Credit Card Buttons -->
+      <div id="paypal-button-container"></div>
     </div>
   </div>
 
   <script>
-    // Initialize PayPal Card Fields with Sandbox Order API
-    const cardFields = paypal.CardFields({
-      createOrder: function () {
-        return fetch("https://api-m.sandbox.paypal.com/v2/checkout/orders", {
-          method: "POST"
-        })
-        .then(() => {
-          // Generates local mock token if backend order endpoint isn't mounted
-          return "DEMO_SANDBOX_ORDER_ID";
+    paypal.Buttons({
+      style: {
+        layout: 'vertical',
+        color:  'gold',
+        shape:  'rect',
+        label:  'paypal'
+      },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            description: "FoodFusion - Veg Burger",
+            amount: {
+              value: "0.75"
+            }
+          }]
         });
       },
-      onApprove: function (data) {
-        alert("Payment Authorized successfully via PayPal Sandbox!");
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Order Placed Successfully! Paid by: ' + details.payer.name.given_name);
+        });
       },
-      onError: function (error) {
-        // Fallback simulation for static client-side testing without backend node server
-        alert("Simulating Card Payment: Success! Order placed with card details entered.");
+      onError: function(err) {
+        console.error(err);
       }
-    });
-
-    // Render official hosted fields
-    if (cardFields.isEligible()) {
-      const cardNumberField = cardFields.NumberField();
-      cardNumberField.render("#card-number");
-
-      const cardExpiryField = cardFields.ExpiryField();
-      cardExpiryField.render("#card-expiry");
-
-      const cardCvvField = cardFields.CVVField();
-      cardCvvField.render("#card-cvv");
-
-      document.getElementById("card-field-submit-button").addEventListener("click", function () {
-        const btn = this;
-        btn.disabled = true;
-        btn.innerText = "Processing...";
-        
-        cardFields.submit().catch(function () {
-          setTimeout(function() {
-            btn.disabled = false;
-            btn.innerText = "Pay $0.75";
-            alert("Sandbox Test Card Accepted! Order confirmed for FoodFusion.");
-          }, 1500);
-        });
-      });
-    } else {
-      console.warn("Card Fields not eligible with this client-id or currency.");
-    }
+    }).render('#paypal-button-container');
   </script>
 
 </body>
